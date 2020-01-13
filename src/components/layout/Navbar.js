@@ -11,7 +11,7 @@ const Navbar = () => {
         <Link to="/" className="brand-logo">
           Planner
         </Link>
-        {/* <SignedOutLinks /> */}
+        <SignedOutLinks />
         <SignedInLinks />
       </div>
     </nav>
