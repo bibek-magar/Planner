@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { firestoreConnect } from "react-redux-firebase";
+import { compose } from "redux";
 import Notifications from "./Notification";
 import ProjectList from "../projects/ProjectList";
 
@@ -21,9 +22,13 @@ const Dashboard = ({ projects }) => {
 };
 
 const mapStateToProps = state => {
+  console.log(state);
   return {
-    projects: state.project.projects
+    projects: state.firestore.ordered.projects
   };
 };
 
-export default connect(mapStateToProps, null)(Dashboard);
+export default compose(
+  connect(mapStateToProps, null),
+  firestoreConnect([{ collection: "projects" }])
+)(Dashboard);

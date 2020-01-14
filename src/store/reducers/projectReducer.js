@@ -1,3 +1,5 @@
+import { CREATE_PROJECT, CREATE_PROJECT_ERROR } from "../constants";
+
 const initState = {
   projects: [
     { id: "1", title: "Help me find", content: "This is the content of id 1" },
@@ -5,9 +7,14 @@ const initState = {
     { id: "3", title: "Kill me find", content: "This is the content of id 3" }
   ]
 };
-const projectReducer = (state = initState, action) => {
-  switch (action) {
-    case action.type:
+const projectReducer = (state = initState, action, props) => {
+  switch (action.type) {
+    case CREATE_PROJECT:
+      console.log(action.payload);
+      return state;
+    case CREATE_PROJECT_ERROR:
+      console.log(action.payload);
+      return state;
     default:
       return state;
   }
