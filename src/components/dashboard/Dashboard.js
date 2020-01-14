@@ -1,14 +1,16 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import Notifications from "./Notification";
 import ProjectList from "../projects/ProjectList";
 
-const Dashboard = () => {
+const Dashboard = ({ projects }) => {
+  console.log(projects);
   return (
     <div className="dashboard container">
       <div className="row">
         <div className="col s12 m6">
-          <ProjectList />
+          <ProjectList projects={projects} />
         </div>
         <div className="col s12 m5 offset-m1">
           <Notifications />
@@ -18,4 +20,10 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = state => {
+  return {
+    projects: state.project.projects
+  };
+};
+
+export default connect(mapStateToProps, null)(Dashboard);
