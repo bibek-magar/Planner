@@ -10,10 +10,8 @@ const initState = {
 const projectReducer = (state = initState, action, props) => {
   switch (action.type) {
     case CREATE_PROJECT:
-      console.log(action.payload);
       return state;
     case CREATE_PROJECT_ERROR:
-      console.log(action.payload);
       return state;
     default:
       return state;

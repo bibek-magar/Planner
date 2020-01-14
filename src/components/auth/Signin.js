@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { signIn } from "../../store/actions/authActions";
 
-export default function Signin() {
+import { Redirect } from "react-router-dom";
+
+const Signin = ({ signIn, authError, auth }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
+    signIn({ email, password });
   };
+  if (auth.uid) return <Redirect to="/" />;
 
   return (
     <div className="container">
@@ -34,8 +38,24 @@ export default function Signin() {
         </div>
         <div className="input-field">
           <button className="button btn ping lighten-1 z-depth-0">Login</button>
+          <div className="red-text center">{authError ? authError : null}</div>
         </div>
       </form>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => {
+  return {
+    authError: state.auth.authError,
+    auth: state.firebase.auth
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: creds => dispatch(signIn(creds))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);

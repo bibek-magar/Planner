@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
+import { Redirect } from "react-router-dom";
 
-const ProjectDetail = ({ project }) => {
-  console.log(project);
+const ProjectDetail = ({ project, auth }) => {
   if (project) {
     let {
       authorFirstName,
@@ -14,7 +14,10 @@ const ProjectDetail = ({ project }) => {
       createdAt
     } = project;
     const date = new Date(createdAt.seconds);
-    console.log(date);
+
+    if (!auth.uid) {
+      return <Redirect to="/signin" />;
+    }
 
     return (
       <div className="container section project-details">
@@ -42,7 +45,8 @@ const mapStateToProps = (state, ownProps) => {
   const projects = state.firestore.data.projects;
   const project = projects ? projects[id] : null;
   return {
-    project
+    project,
+    auth: state.firebase.auth
   };
 };
 

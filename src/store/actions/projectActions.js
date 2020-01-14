@@ -15,7 +15,6 @@ export const createProject = project => async (
       createdAt: new Date()
     });
 
-    console.log("solved");
     dispatch({ type: CREATE_PROJECT, payload: project });
   } catch (e) {
     dispatch({ type: CREATE_PROJECT_ERROR, payload: e });

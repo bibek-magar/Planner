@@ -5,9 +5,13 @@ import App from "./App";
 import firebase from "firebase/app";
 
 import { createStore, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 
-import { ReactReduxFirebaseProvider, getFirebase } from "react-redux-firebase";
+import {
+  ReactReduxFirebaseProvider,
+  getFirebase,
+  isLoaded
+} from "react-redux-firebase";
 import {
   createFirestoreInstance,
   getFirestore,
@@ -28,7 +32,10 @@ const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
 const store = createStore(
   rootReducer,
   initialState,
-  compose(applyMiddleware(...middlewares), reduxFirestore(firebaseConfig))
+  compose(
+    applyMiddleware(...middlewares),
+    reduxFirestore(firebaseConfig, { attachAuthIsReady: true })
+  )
 );
 
 const rrfProps = {
@@ -40,16 +47,24 @@ const rrfProps = {
   createFirestoreInstance
 };
 
+function AuthIsLoaded({ children }) {
+  const auth = useSelector(state => state.firebase.auth);
+  if (!isLoaded(auth)) return <div>splash screen...</div>;
+  return children;
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
-      <App />
+      <AuthIsLoaded>
+        <App />
+      </AuthIsLoaded>
     </ReactReduxFirebaseProvider>
   </Provider>,
   document.getElementById("root")
 );
+serviceWorker.unregister();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
