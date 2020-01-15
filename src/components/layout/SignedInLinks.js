@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 import { signOut } from "../../store/actions/authActions";
 
 const SignedInLinks = ({ signOut, profile }) => {
-  console.log(profile);
-
   return (
     <ul className="right">
       <li>

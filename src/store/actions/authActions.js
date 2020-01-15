@@ -24,7 +24,6 @@ export const signOut = () => {
 
 export const signUp = ({ email, password, firstName, lastName }) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    console.log("signup action called");
     try {
       const firebase = getFirebase();
       const firestore = getFirestore();
