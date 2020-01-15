@@ -29,20 +29,21 @@ const initialState = {};
 
 const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
 
+const rrfConfig = {
+  userProfile: "users",
+  useFirestoreForProfile: true,
+  attachAuthIsReady: true
+};
+
 const store = createStore(
   rootReducer,
   initialState,
-  compose(
-    applyMiddleware(...middlewares),
-    reduxFirestore(firebaseConfig, { attachAuthIsReady: true })
-  )
+  compose(applyMiddleware(...middlewares), reduxFirestore(firebaseConfig))
 );
 
 const rrfProps = {
   firebase,
-  config: {
-    userProfile: "users"
-  },
+  config: rrfConfig,
   dispatch: store.dispatch,
   createFirestoreInstance
 };

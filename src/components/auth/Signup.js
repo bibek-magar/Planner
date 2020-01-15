@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-const Signup = ({ auth }) => {
+import { signUp } from "../../store/actions/authActions";
+
+const Signup = ({ auth, signUp, authError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -10,8 +12,8 @@ const Signup = ({ auth }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    signUp({ email, password, firstName, lastName });
   };
-  console.log(auth.id);
 
   if (auth.uid) return <Redirect to="/" />;
 
@@ -57,6 +59,9 @@ const Signup = ({ auth }) => {
           <button className="button btn ping lighten-1 z-depth-0">
             Signup
           </button>
+          <div className="red-text center">
+            {authError ? <p>{authError}</p> : null}
+          </div>
         </div>
       </form>
     </div>
@@ -65,8 +70,14 @@ const Signup = ({ auth }) => {
 
 const mapStateToProps = state => {
   return {
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    authError: state.auth.authError
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    signUp: user => dispatch(signUp(user))
   };
 };
 
-export default connect(mapStateToProps, null)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

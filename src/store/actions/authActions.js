@@ -21,3 +21,27 @@ export const signOut = () => {
     dispatch({ type: "SIGNOUT_SUCCESS" });
   };
 };
+
+export const signUp = ({ email, password, firstName, lastName }) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    console.log("signup action called");
+    try {
+      const firebase = getFirebase();
+      const firestore = getFirestore();
+      let response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      await firestore
+        .collection("users")
+        .doc(response.user.uid)
+        .set({
+          firstName,
+          lastName,
+          initials: firstName[0] + lastName[0]
+        });
+      dispatch({ type: "SIGNUP_SUCCESS" });
+    } catch (err) {
+      dispatch({ type: "SIGNUP_FAIL", payload: err });
+    }
+  };
+};
